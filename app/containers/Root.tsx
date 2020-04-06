@@ -6,9 +6,9 @@ import { hot } from 'react-hot-loader/root';
 import { History } from 'history';
 import routes from '../constants/routes.json';
 import { Store } from '../store';
-import HomePage from './HomePage';
-import CounterPage from './CounterPage';
-import TopologyPage from './TopologyPage';
+import Counter from '../components/counter';
+import Topology from '../components/topology';
+import Home from '../components/home';
 
 type Props = {
   store: Store;
@@ -19,9 +19,9 @@ const Root = ({ store, history }: Props) => (
   <Provider store={store}>
     <ConnectedRouter history={history}>
       <Switch>
-        <Route path={routes.COUNTER} component={CounterPage} />
-        <Route path={routes.TOPOLOGY} component={TopologyPage} />
-        <Route path={routes.HOME} component={HomePage} />
+        <Route path={routes.COUNTER} component={Counter} />
+        <Route path={routes.TOPOLOGY} component={Topology} />
+        <Route path={routes.HOME} component={Home} />
       </Switch>
     </ConnectedRouter>
   </Provider>
