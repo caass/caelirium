@@ -4,11 +4,11 @@ import { ConnectedRouter } from 'connected-react-router';
 import { Switch, Route } from 'react-router-dom';
 import { hot } from 'react-hot-loader/root';
 import { History } from 'history';
-import routes from './constants/routes.json';
-import { Store } from './store';
-import Counter from './components/counter';
-import Topology from './components/topology';
-import Home from './components/home';
+import routes from './routes.json';
+import { Store } from '../store';
+import Counter from './counter';
+import Topology from './topology';
+import Home from './home';
 
 type Props = {
   store: Store;

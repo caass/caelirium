@@ -9,7 +9,7 @@ import {
   clearDevices,
   addDevice
 } from './topologySlice';
-import routes from '../../constants/routes.json';
+import routes from '../routes.json';
 
 export default function Topology() {
   const devices = useSelector(selectDevices);
