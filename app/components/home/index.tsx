@@ -13,7 +13,6 @@ const Home: React.FunctionComponent = () => {
         </div>
         <h1>Caelirium</h1>
       </div>
-      <Link to={routes.internal.COUNTER}>to Counter</Link>
       <Link to={routes.internal.TOPOLOGY}>to Topology</Link>
     </div>
   );

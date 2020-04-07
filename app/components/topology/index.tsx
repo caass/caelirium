@@ -17,7 +17,7 @@ import DeviceCard from '../deviceCard';
 import { ProbeStatus } from '../../utils/NetworkDevice';
 import { parse as parseNmapResults, probeIPs } from '../../utils/nmap';
 
-export default function Topology() {
+const Topology: React.FunctionComponent = () => {
   const devices = useSelector(selectDevices);
   const dispatch = useDispatch();
 
@@ -98,4 +98,6 @@ export default function Topology() {
       </div>
     </div>
   );
-}
+};
+
+export default Topology;

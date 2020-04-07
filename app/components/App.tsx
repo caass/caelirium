@@ -6,7 +6,6 @@ import { hot } from 'react-hot-loader/root';
 import { History } from 'history';
 import routes from './routes.json';
 import { Store } from '../store';
-import Counter from './counter';
 import Topology from './topology';
 import Home from './home';
 
@@ -15,12 +14,11 @@ type Props = {
   history: History;
 };
 
-const Root = ({ store, history }: Props) => (
+const Root: React.FunctionComponent<Props> = ({ store, history }: Props) => (
   <Provider store={store}>
     <ConnectedRouter history={history}>
       <div className="container m-auto p-4">
         <Switch>
-          <Route path={routes.internal.COUNTER} component={Counter} />
           <Route path={routes.internal.TOPOLOGY} component={Topology} />
           <Route path={routes.internal.HOME} component={Home} />
         </Switch>

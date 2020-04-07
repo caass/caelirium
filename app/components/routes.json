@@ -1,8 +1,7 @@
 {
   "internal": {
     "HOME": "/",
-    "TOPOLOGY": "/topology",
-    "COUNTER": "/counter"
+    "TOPOLOGY": "/topology"
   },
   "external": {
     "GITHUB": "https://github.com/dfridkin/caelirium"
