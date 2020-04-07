@@ -8,9 +8,14 @@ export enum ProbeStatus {
 }
 
 export default interface NetworkDevice extends IDevice {
-  ports: string[] | undefined;
-  manufacturer: string | undefined;
-  os: string | { name: string; likelihood: number }[] | undefined;
+  online?: boolean;
+  lastboot?: string;
+  vendor?: string;
+  os?: string | { name: string; accuracy: number }[];
   probeStatus: ProbeStatus;
-  probeError: Error | undefined;
+  ports?: {
+    number: number;
+    protocol: string;
+    service: string;
+  }[];
 }

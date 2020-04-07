@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import NetworkDevice, { ProbeStatus } from './NetworkDevice';
+import NetworkDevice, { ProbeStatus } from '../../utils/NetworkDevice';
 // eslint-disable-next-line import/no-cycle
 import { RootState } from '../../store';
 
@@ -17,9 +17,6 @@ const topologySlice = createSlice({
       );
       state.devices.push(...newDevices);
     },
-    removeDevice: (state, action: PayloadAction<NetworkDevice>) => {
-      state.devices.splice(state.devices.indexOf(action.payload), 1);
-    },
     clearDevices: state => {
       state.devices = Array<NetworkDevice>();
     },
@@ -30,22 +27,28 @@ const topologySlice = createSlice({
       state.scanningNetwork = false;
       state.scanError = action.payload;
     },
-    startProbingDevice: (state, action: PayloadAction<string>) => {
-      const device = state.devices.find(({ ip }) => ip === action.payload);
-      if (device) {
-        device.probeStatus = ProbeStatus.IN_PROGRESS;
-      }
+    startProbingDevices: (state, action: PayloadAction<string[]>) => {
+      state.devices
+        .filter(({ ip }) => action.payload.includes(ip))
+        .forEach(d => {
+          d.probeStatus = ProbeStatus.IN_PROGRESS;
+        });
+    },
+    stopProbingDevices: (state, action: PayloadAction<NetworkDevice[]>) => {
+      action.payload.forEach(d => {
+        state.devices[state.devices.findIndex(({ ip }) => ip === d.ip)] = d;
+      });
     }
   }
 });
 
 export const {
   addDevices,
-  removeDevice,
   clearDevices,
   startScanningNetwork,
   stopScanningNetwork,
-  startProbingDevice
+  startProbingDevices,
+  stopProbingDevices
 } = topologySlice.actions;
 
 export default topologySlice.reducer;

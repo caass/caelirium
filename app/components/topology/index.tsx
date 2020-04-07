@@ -8,11 +8,14 @@ import {
   startScanningNetwork,
   stopScanningNetwork,
   addDevices,
-  startProbingDevice
+  startProbingDevices,
+  clearDevices,
+  stopProbingDevices
 } from './slice';
 import routes from '../routes.json';
-import DeviceCard from './deviceCard';
-import { ProbeStatus } from './NetworkDevice';
+import DeviceCard from '../deviceCard';
+import { ProbeStatus } from '../../utils/NetworkDevice';
+import { parse as parseNmapResults, probeIPs } from '../../utils/nmap';
 
 export default function Topology() {
   const devices = useSelector(selectDevices);
@@ -44,10 +47,30 @@ export default function Topology() {
   };
 
   useEffect(() => {
-    devices
+    if (devices.length === 0) {
+      return;
+    }
+
+    const devicesToProbe = devices
       .filter(({ probeStatus }) => probeStatus === ProbeStatus.NOT_STARTED)
-      .forEach(({ ip }) => {
-        dispatch(startProbingDevice(ip));
+      .map(({ ip }) => ip);
+
+    if (devicesToProbe.length === 0) {
+      return;
+    }
+
+    dispatch(startProbingDevices(devicesToProbe));
+    probeIPs(devicesToProbe)
+      .then(parseNmapResults)
+      .then(({ run, devices: probedDevices }) => {
+        // Debugging
+        // console.log(run);
+        // console.dir(probedDevices);
+        dispatch(stopProbingDevices(probedDevices));
+      })
+      .catch(err => {
+        // TODO: Handle errors lol
+        throw err;
       });
   }, [devices]);
 
@@ -56,6 +79,13 @@ export default function Topology() {
       <Link to={routes.HOME}>home</Link>
       <button aria-label="Scan for devices" onClick={scanNetwork} type="button">
         Scan
+      </button>
+      <button
+        aria-label="Clear devices"
+        onClick={() => dispatch(clearDevices())}
+        type="button"
+      >
+        clear devices
       </button>
       <div>
         <ol>
