@@ -17,7 +17,7 @@ export default function Counter() {
   return (
     <div>
       <div className={styles.backButton} data-tid="backButton">
-        <Link to={routes.HOME}>
+        <Link to={routes.internal.HOME}>
           <i className="fa fa-arrow-left fa-3x" />
         </Link>
       </div>

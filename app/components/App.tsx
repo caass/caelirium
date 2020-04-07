@@ -18,11 +18,11 @@ type Props = {
 const Root = ({ store, history }: Props) => (
   <Provider store={store}>
     <ConnectedRouter history={history}>
-      <div className="container mx-auto p-4">
+      <div className="container m-auto p-4">
         <Switch>
-          <Route path={routes.COUNTER} component={Counter} />
-          <Route path={routes.TOPOLOGY} component={Topology} />
-          <Route path={routes.HOME} component={Home} />
+          <Route path={routes.internal.COUNTER} component={Counter} />
+          <Route path={routes.internal.TOPOLOGY} component={Topology} />
+          <Route path={routes.internal.HOME} component={Home} />
         </Switch>
       </div>
     </ConnectedRouter>

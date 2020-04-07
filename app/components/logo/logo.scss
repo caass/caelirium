@@ -1,0 +1,11 @@
+@import '../../styles/colors';
+
+.logo {
+  color: $white;
+
+  &:hover,
+  &:focus {
+    color: $accent-1;
+    transform: translateY(-5%);
+  }
+}

@@ -76,7 +76,7 @@ export default function Topology() {
 
   return (
     <div>
-      <Link to={routes.HOME}>home</Link>
+      <Link to={routes.internal.HOME}>home</Link>
       <button aria-label="Scan for devices" onClick={scanNetwork} type="button">
         Scan
       </button>
