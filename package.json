@@ -296,6 +296,7 @@
     "redux-thunk": "^2.3.0",
     "source-map-support": "^0.5.16",
     "sudo-prompt": "^9.1.1",
+    "tailwindcss": "^1.2.0",
     "xml2js": "^0.4.23"
   },
   "devEngines": {
