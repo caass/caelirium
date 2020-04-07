@@ -1,29 +1,30 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { shell } from 'electron';
+import { CloudSnow } from 'react-feather';
 import { logo } from './logo.scss';
 
 import routes from '../routes.json';
 
-export default function Logo() {
-  const [hovered, setHovered] = useState(false);
+type Props = {
+  size: number;
+};
+
+const Logo: React.FunctionComponent<Props> = ({ size }: Props) => {
   return (
-    <i
+    <CloudSnow
+      size={size}
       aria-label="Caelirium logo"
       role="button"
       tabIndex={0}
-      className={`${logo} fas ${
-        hovered ? 'fa-cloud-upload-alt' : 'fa-cloud-download-alt'
-      } mr-3 transition duration-500 ease-in-out`}
+      className={`${logo} transition duration-500 ease-in-out`}
       onClick={() => shell.openExternal(routes.external.GITHUB)}
       onKeyDown={({ key }) => {
         if (key === 'Enter') {
           shell.openExternal(routes.external.GITHUB);
         }
       }}
-      onFocus={() => setHovered(true)}
-      onBlur={() => setHovered(false)}
-      onMouseLeave={() => setHovered(false)}
-      onMouseEnter={() => setHovered(true)}
     />
   );
-}
+};
+
+export default Logo;

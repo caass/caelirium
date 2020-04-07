@@ -274,7 +274,6 @@
     "yarn": "^1.21.1"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.13.0",
     "@hot-loader/react-dom": "^16.13.0",
     "@reduxjs/toolkit": "^1.2.5",
     "connected-react-router": "^6.6.1",
@@ -288,6 +287,7 @@
     "moment": "^2.24.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-feather": "^2.0.3",
     "react-hot-loader": "^4.12.19",
     "react-redux": "^7.2.0",
     "react-router": "^5.1.2",
