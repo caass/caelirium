@@ -13,6 +13,7 @@ body {
   font-family: 'Red Hat Text', Arial, Helvetica, sans-serif;
   background-color: $dark;
   color: $white;
+  -webkit-app-region: drag;
 
   h1,
   h2,
@@ -21,5 +22,9 @@ body {
   h5,
   h6 {
     font-family: 'Red Hat Display', Arial, Helvetica, sans-serif;
+  }
+
+  pre {
+    font-family: 'Fira Code', monospace;
   }
 }

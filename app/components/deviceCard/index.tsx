@@ -5,9 +5,9 @@ type Props = {
   device: NetworkDevice;
 };
 
-const DeviceCard: React.FunctionComponent<Props> = ({
-  device: { name, ip, mac, lastboot, vendor, os, probeStatus, ports }
-}: Props) => {
+const DeviceCard: React.FunctionComponent<Props> = ({ device }: Props) => {
+  const { name, ip, mac, lastboot, vendor, os, probeStatus, ports } = device;
+
   return (
     <ul>
       <li>{name}</li>

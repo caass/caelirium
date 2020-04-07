@@ -1,7 +1,7 @@
 import React from 'react';
 import { shell } from 'electron';
 import { CloudSnow } from 'react-feather';
-import { logo } from './logo.scss';
+import { logo } from './styles.scss';
 
 import routes from '../../routes.json';
 
