@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 import { AppContainer as ReactHotAppContainer } from 'react-hot-loader';
 import App from './components/App';
 import { history, configuredStore } from './store';
-import './app.global.css';
+import './styles/app.global.scss';
 
 const store = configuredStore();
 
