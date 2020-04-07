@@ -12,8 +12,8 @@ import {
   clearDevices,
   stopProbingDevices
 } from './slice';
-import routes from '../routes.json';
-import DeviceCard from '../deviceCard';
+import routes from '../../routes.json';
+import DeviceCard from '../../components/deviceCard';
 import { ProbeStatus } from '../../utils/NetworkDevice';
 import { parse as parseNmapResults, probeIPs } from '../../utils/nmap';
 

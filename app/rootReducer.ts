@@ -2,7 +2,7 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 import { History } from 'history';
-import topologyReducer from './components/topology/slice';
+import topologyReducer from './containers/topology/slice';
 
 const createRootReducer = (history: History) => {
   return combineReducers({

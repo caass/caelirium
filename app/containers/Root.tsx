@@ -4,7 +4,7 @@ import { ConnectedRouter } from 'connected-react-router';
 import { Switch, Route } from 'react-router-dom';
 import { hot } from 'react-hot-loader/root';
 import { History } from 'history';
-import routes from './routes.json';
+import routes from '../routes.json';
 import { Store } from '../store';
 import Topology from './topology';
 import Home from './home';
