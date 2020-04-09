@@ -77,11 +77,10 @@ const Topology: React.FunctionComponent = () => {
 
   return (
     <>
-      <PageHeader title="Topology">
-        <BigIcon ariaLabel="Network Topology Icon">
-          <Map />
-        </BigIcon>
-      </PageHeader>
+      <PageHeader
+        title="Topology"
+        icon={<BigIcon ariaLabel="Network Topology Icon" icon={<Map />} />}
+      />
       <button aria-label="Scan for devices" onClick={scanNetwork} type="button">
         Scan
       </button>
