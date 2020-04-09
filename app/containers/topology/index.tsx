@@ -1,8 +1,16 @@
 /* eslint-disable promise/always-return */
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import find from 'local-devices';
 import { Map } from 'react-feather';
+
+import find from 'local-devices';
+
+import Container from '../../components/container';
+import DeviceCard from '../../components/deviceCard';
+
+import { ProbeStatus } from '../../utils/NetworkDevice';
+import { parse as parseNmapResults, probeIPs } from '../../utils/nmap';
+
 import {
   selectDevices,
   startScanningNetwork,
@@ -12,11 +20,6 @@ import {
   clearDevices,
   stopProbingDevices
 } from './slice';
-import DeviceCard from '../../components/deviceCard';
-import { ProbeStatus } from '../../utils/NetworkDevice';
-import { parse as parseNmapResults, probeIPs } from '../../utils/nmap';
-import PageHeader from '../../components/pageHeader';
-import BigIcon from '../../components/bigIcon';
 
 const Topology: React.FunctionComponent = () => {
   const devices = useSelector(selectDevices);
@@ -76,11 +79,12 @@ const Topology: React.FunctionComponent = () => {
   }, [devices]);
 
   return (
-    <>
-      <PageHeader
-        title="Topology"
-        icon={<BigIcon ariaLabel="Network Topology Icon" icon={<Map />} />}
-      />
+    <Container
+      title="Topology"
+      header={{
+        icon: <Map />
+      }}
+    >
       <button aria-label="Scan for devices" onClick={scanNetwork} type="button">
         Scan
       </button>
@@ -100,7 +104,7 @@ const Topology: React.FunctionComponent = () => {
           ))}
         </ol>
       </div>
-    </>
+    </Container>
   );
 };
 
