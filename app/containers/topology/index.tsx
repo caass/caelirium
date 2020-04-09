@@ -1,15 +1,20 @@
 /* eslint-disable promise/always-return */
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Map } from 'react-feather';
+
+import { Map, Search, XCircle, BarChart2, Loader } from 'react-feather';
 
 import find from 'local-devices';
 
 import Container from '../../components/container';
 import DeviceCard from '../../components/deviceCard';
+import Button from '../../components/button';
 
 import { ProbeStatus } from '../../utils/NetworkDevice';
 import { parse as parseNmapResults, probeIPs } from '../../utils/nmap';
+
+import { scanWrapper } from './styles.scss';
+import { spin } from '../../styles/_animations.scss';
 
 import {
   selectDevices,
@@ -18,14 +23,18 @@ import {
   addDevices,
   startProbingDevices,
   clearDevices,
-  stopProbingDevices
+  stopProbingDevices,
+  selectScanningNetwork,
+  selectProbingDevices
 } from './slice';
 
 const Topology: React.FunctionComponent = () => {
   const devices = useSelector(selectDevices);
+  const isScanning = useSelector(selectScanningNetwork);
+  const isProbing = useSelector(selectProbingDevices);
   const dispatch = useDispatch();
 
-  const scanNetwork = () => {
+  const lightScan = () => {
     dispatch(startScanningNetwork());
     find()
       .then(foundDevices => {
@@ -50,11 +59,7 @@ const Topology: React.FunctionComponent = () => {
       });
   };
 
-  useEffect(() => {
-    if (devices.length === 0) {
-      return;
-    }
-
+  const deepScan = () => {
     const devicesToProbe = devices
       .filter(({ probeStatus }) => probeStatus === ProbeStatus.NOT_STARTED)
       .map(({ ip }) => ip);
@@ -76,7 +81,7 @@ const Topology: React.FunctionComponent = () => {
         // TODO: Handle errors lol
         throw err;
       });
-  }, [devices]);
+  };
 
   return (
     <Container
@@ -85,16 +90,32 @@ const Topology: React.FunctionComponent = () => {
         icon: <Map />
       }}
     >
-      <button aria-label="Scan for devices" onClick={scanNetwork} type="button">
-        Scan
-      </button>
-      <button
-        aria-label="Clear devices"
-        onClick={() => dispatch(clearDevices())}
-        type="button"
+      <div
+        className={`${scanWrapper} flex flex-row justify-center items-baseline`}
       >
-        clear devices
-      </button>
+        <Button
+          icon={isScanning ? <Loader className={spin} /> : <BarChart2 />}
+          text="Scan Network"
+          onClick={lightScan}
+        />
+        {devices.length > 0 ? (
+          <>
+            <Button
+              icon={isProbing ? <Loader className={spin} /> : <Search />}
+              text="Inspect Devices"
+              onClick={deepScan}
+            />
+            <Button
+              icon={<XCircle />}
+              text="Clear Devices"
+              onClick={() => dispatch(clearDevices())}
+              buttonType="warning"
+            />
+          </>
+        ) : (
+          ''
+        )}
+      </div>
       <div>
         <ol>
           {devices.map(d => (

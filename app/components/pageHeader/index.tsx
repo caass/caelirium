@@ -10,7 +10,7 @@ type Props = {
 const PageHeader: React.FunctionComponent<Props> = ({ icon, title }: Props) => {
   return (
     <div className="flex flex-col justify-center items-center content-center">
-      <div className="text-6xl flex flex-row items-baseline mb-12 flex-wrap">
+      <div className="text-6xl flex flex-row items-baseline mb-4 flex-wrap">
         <div className="mr-3 flex flex-row items-center">
           <h1>{icon}</h1>
         </div>

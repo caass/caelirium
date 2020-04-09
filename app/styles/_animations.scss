@@ -1,0 +1,13 @@
+.spin {
+  animation: full-rotation 2.2s infinite cubic-bezier(0.515, 0.13, 0.705, 0.82);
+}
+
+@keyframes full-rotation {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(359deg);
+  }
+}

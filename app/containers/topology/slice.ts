@@ -54,3 +54,9 @@ export const {
 export default topologySlice.reducer;
 
 export const selectDevices = (state: RootState) => state.topology.devices;
+export const selectScanningNetwork = (state: RootState) =>
+  state.topology.scanningNetwork;
+export const selectProbingDevices = (state: RootState) =>
+  state.topology.devices.filter(
+    ({ probeStatus }) => probeStatus === ProbeStatus.IN_PROGRESS
+  ).length > 0;
