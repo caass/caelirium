@@ -1,0 +1,13 @@
+@import '../../styles/colors';
+
+.icon {
+  color: $white;
+  outline: none;
+}
+
+.hoverable {
+  &:hover {
+    color: $accent-1;
+    transform: translateY(-5%);
+  }
+}

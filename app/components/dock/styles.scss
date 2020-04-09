@@ -1,0 +1,24 @@
+@import '../../styles/colors';
+
+.dock {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%);
+  background-color: adjust-color($light, $alpha: -0.85);
+}
+
+.active {
+  background-color: adjust-color($accent-1, $alpha: -0.7);
+
+  svg {
+    // disable color change on hover
+    color: $white !important;
+  }
+}
+
+.inactive {
+  svg {
+    color: $light;
+  }
+}

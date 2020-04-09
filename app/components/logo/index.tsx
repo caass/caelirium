@@ -5,14 +5,10 @@ import { logo } from './styles.scss';
 
 import routes from '../../routes.json';
 
-type Props = {
-  size: number;
-};
-
-const Logo: React.FunctionComponent<Props> = ({ size }: Props) => {
+const Logo: React.FunctionComponent = () => {
   return (
     <CloudSnow
-      size={size}
+      size={48}
       aria-label="Caelirium logo"
       role="button"
       tabIndex={0}
