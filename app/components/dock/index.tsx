@@ -3,6 +3,7 @@ import { useHistory } from 'react-router';
 import { dock, active, inactive } from './styles.scss';
 
 import BigIcon from '../bigIcon';
+import Popover from '../popover';
 
 type Props = {
   icons: {
@@ -20,18 +21,27 @@ const Dock: React.FunctionComponent<Props> = ({ icons }: Props) => {
       className={`${dock} flex flex-row-reverse mb-2 justify-center mx-auto p-1 rounded-lg`}
     >
       {icons.map(({ path, icon: PageIcon, name }, i) => (
-        <div
-          key={name}
-          className={`my-0 p-2 rounded-lg w-full ${i === 0 ? '' : 'mr-1'} ${
-            i === icons.length - 1 ? '' : 'ml-1'
-          } ${history.location.pathname === path ? active : inactive} `}
-        >
-          <BigIcon
-            icon={<PageIcon />}
-            onClick={() => history.push(path)}
-            ariaLabel={name}
-          />
-        </div>
+        <Popover text={name} key={name}>
+          <div
+            key={name}
+            // ml and mr are flipped because of row-reverse
+            className={`${i === 0 ? '' : 'mr-1'} ${
+              i === icons.length - 1 ? '' : 'ml-1'
+            }`}
+          >
+            <div
+              className={`m-0 p-2 rounded-lg w-full ${
+                history.location.pathname === path ? active : inactive
+              }`}
+            >
+              <BigIcon
+                icon={<PageIcon />}
+                onClick={() => history.push(path)}
+                ariaLabel={name}
+              />
+            </div>
+          </div>
+        </Popover>
       ))}
     </div>
   );
