@@ -65,7 +65,7 @@ export default class MenuBuilder {
         { label: 'Services', submenu: [] },
         { type: 'separator' },
         {
-          label: 'Hide ElectronReact',
+          label: 'Hide Caelirium',
           accelerator: 'Command+H',
           selector: 'hide:'
         },
