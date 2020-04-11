@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import NetworkDevice, { ProbeStatus } from '../../utils/NetworkDevice';
 // eslint-disable-next-line import/no-cycle
-import { RootState } from '../../store';
+import { RootState } from '../../redux/store';
 
 const topologySlice = createSlice({
   name: 'topology',

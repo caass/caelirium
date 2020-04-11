@@ -1,7 +1,6 @@
 import React from 'react';
 import { shell } from 'electron';
 import { CloudSnow } from 'react-feather';
-import routes from '../../routes.json';
 import Container from '../../components/container';
 
 const Home: React.FunctionComponent = () => {
@@ -10,7 +9,8 @@ const Home: React.FunctionComponent = () => {
       title="Caelirium"
       header={{
         icon: <CloudSnow />,
-        onClick: () => shell.openExternal(routes.external.GITHUB)
+        onClick: () =>
+          shell.openExternal('https://github.com/dfridkin/caelirium')
       }}
     />
   );

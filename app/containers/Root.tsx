@@ -7,8 +7,8 @@ import { History } from 'history';
 
 import { Map, Home } from 'react-feather';
 
-import routes from '../routes.json';
-import { Store } from '../store';
+import routes from './routes.json';
+import { Store } from '../redux/store';
 
 import TopologyContainer from './topology';
 import HomeContainer from './home';
@@ -29,13 +29,13 @@ type Pages = {
 
 const pages: Pages = [
   {
-    path: routes.internal.TOPOLOGY,
+    path: routes.TOPOLOGY,
     container: TopologyContainer,
     icon: Map,
     name: 'Network Topology'
   },
   {
-    path: routes.internal.HOME,
+    path: routes.HOME,
     container: HomeContainer,
     icon: Home,
     name: 'Home'
