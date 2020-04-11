@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styles from './Counter.css';
-import routes from '../../routes.json';
+import routes from '../../containers/routes.json';
 import {
   increment,
   decrement,
@@ -17,7 +17,7 @@ export default function Counter() {
   return (
     <div>
       <div className={styles.backButton} data-tid="backButton">
-        <Link to={routes.internal.HOME}>
+        <Link to={routes.HOME}>
           <i className="fa fa-arrow-left fa-3x" />
         </Link>
       </div>
