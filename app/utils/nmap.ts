@@ -13,7 +13,8 @@ const NMAP_OPTS = [
   '-Pn', // Treat all hosts as online -- skip host discovery,
   '-O', // Enable OS detection
   '-sV', // Probe open ports to determine service/version info
-  '-T5', // Set timing template (higher is faster)
+  '--version-light', // Limit to most likely probes (intensity 2)
+  '-T4', // Set timing template (higher is faster)
   '-oX -' // Output scan in XML
 ];
 
