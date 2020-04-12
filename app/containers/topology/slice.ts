@@ -8,7 +8,14 @@ const topologySlice = createSlice({
   initialState: {
     devices: Array<NetworkDevice>(),
     scanningNetwork: false,
-    scanError: null as Error | null
+    scanError: null as Error | null,
+    lastRun: undefined as
+      | undefined
+      | {
+          started: string;
+          ended: string;
+          elapsed: string;
+        }
   },
   reducers: {
     addDevices: (state, action: PayloadAction<NetworkDevice[]>) => {
@@ -38,6 +45,16 @@ const topologySlice = createSlice({
       action.payload.forEach(d => {
         state.devices[state.devices.findIndex(({ ip }) => ip === d.ip)] = d;
       });
+    },
+    updateLastRun: (
+      state,
+      action: PayloadAction<{
+        started: string;
+        ended: string;
+        elapsed: string;
+      }>
+    ) => {
+      state.lastRun = action.payload;
     }
   }
 });
@@ -48,7 +65,8 @@ export const {
   startScanningNetwork,
   stopScanningNetwork,
   startProbingDevices,
-  stopProbingDevices
+  stopProbingDevices,
+  updateLastRun
 } = topologySlice.actions;
 
 export default topologySlice.reducer;
@@ -60,3 +78,4 @@ export const selectProbingDevices = (state: RootState) =>
   state.topology.devices.filter(
     ({ probeStatus }) => probeStatus === ProbeStatus.IN_PROGRESS
   ).length > 0;
+export const selectLastRun = (state: RootState) => state.topology.lastRun;

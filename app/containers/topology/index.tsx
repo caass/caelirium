@@ -1,16 +1,16 @@
 /* eslint-disable promise/always-return */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { Map, Search, XCircle, BarChart2, Loader } from 'react-feather';
 
 import find from 'local-devices';
 
-import Container from '../../components/container';
+import Container, { ContainerProps } from '../../components/container';
 import DeviceCard from '../../components/deviceCard';
 import Button from '../../components/button';
 
-import { ProbeStatus } from '../../utils/NetworkDevice';
+import NetworkDevice, { ProbeStatus } from '../../utils/NetworkDevice';
 import { parse as parseNmapResults, probeIPs } from '../../utils/nmap';
 
 import { scanWrapper } from './styles.scss';
@@ -25,13 +25,19 @@ import {
   clearDevices,
   stopProbingDevices,
   selectScanningNetwork,
-  selectProbingDevices
+  selectProbingDevices,
+  updateLastRun,
+  selectLastRun
 } from './slice';
 
-const Topology: React.FunctionComponent = () => {
+const Topology: React.FunctionComponent<ContainerProps> = ({
+  next,
+  prev
+}: ContainerProps) => {
   const devices = useSelector(selectDevices);
   const isScanning = useSelector(selectScanningNetwork);
   const isProbing = useSelector(selectProbingDevices);
+  const lastRun = useSelector(selectLastRun);
   const dispatch = useDispatch();
 
   const lightScan = () => {
@@ -76,6 +82,27 @@ const Topology: React.FunctionComponent = () => {
         // console.log(run);
         // console.dir(probedDevices);
         dispatch(stopProbingDevices(probedDevices));
+
+        const failedProbes: NetworkDevice[] = devices
+          .filter(
+            ({ ip: potentiallyUnprobedIP }) =>
+              !probedDevices.map(({ ip }) => ip).includes(potentiallyUnprobedIP)
+          )
+          .map(d => ({
+            name: d.name,
+            ip: d.ip,
+            mac: d.mac,
+            online: d.online,
+            lastboot: d.lastboot,
+            vendor: d.vendor,
+            os: d.os,
+            probeStatus: ProbeStatus.FAILED,
+            ports: d.ports
+          }));
+
+        dispatch(stopProbingDevices(failedProbes));
+
+        dispatch(updateLastRun(run.time));
       })
       .catch(err => {
         // TODO: Handle errors lol
@@ -83,12 +110,21 @@ const Topology: React.FunctionComponent = () => {
       });
   };
 
+  useEffect(() => {
+    if (!lastRun) {
+      return;
+    }
+    console.log(`Run completed in ${lastRun.elapsed}`);
+  }, [lastRun]);
+
   return (
     <Container
       title="Topology"
       header={{
         icon: <Map />
       }}
+      next={next}
+      prev={prev}
     >
       <div
         className={`${scanWrapper} flex flex-row justify-center items-baseline`}

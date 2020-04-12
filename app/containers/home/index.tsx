@@ -1,9 +1,12 @@
 import React from 'react';
 import { shell } from 'electron';
 import { CloudSnow } from 'react-feather';
-import Container from '../../components/container';
+import Container, { ContainerProps } from '../../components/container';
 
-const Home: React.FunctionComponent = () => {
+const Home: React.FunctionComponent<ContainerProps> = ({
+  next,
+  prev
+}: ContainerProps) => {
   return (
     <Container
       title="Caelirium"
@@ -12,6 +15,8 @@ const Home: React.FunctionComponent = () => {
         onClick: () =>
           shell.openExternal('https://github.com/dfridkin/caelirium')
       }}
+      next={next}
+      prev={prev}
     />
   );
 };

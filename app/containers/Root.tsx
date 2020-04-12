@@ -14,6 +14,7 @@ import TopologyContainer from './topology';
 import HomeContainer from './home';
 
 import Dock from '../components/dock';
+import { ContainerProps } from '../components/container';
 
 type Props = {
   store: Store;
@@ -22,7 +23,7 @@ type Props = {
 
 type Pages = {
   path: string;
-  container: React.FunctionComponent;
+  container: React.FunctionComponent<ContainerProps>;
   icon: React.ComponentType;
   name: string;
 }[];
@@ -45,10 +46,31 @@ const pages: Pages = [
 const Root: React.FunctionComponent<Props> = ({ store, history }: Props) => (
   <Provider store={store}>
     <ConnectedRouter history={history}>
-      <div className="container m-auto p-4">
+      <div className="container m-auto p-4 h-full">
         <Switch>
-          {pages.map(({ path, container }) => (
-            <Route key={path} path={path} component={container} />
+          {pages.map(({ path, container: Page }, i) => (
+            <Route
+              key={path}
+              path={path}
+              render={() => (
+                <Page
+                  prev={
+                    i < pages.length - 1
+                      ? {
+                          path: pages[i + 1].path
+                        }
+                      : undefined
+                  }
+                  next={
+                    i > 0
+                      ? {
+                          path: pages[i - 1].path
+                        }
+                      : undefined
+                  }
+                />
+              )}
+            />
           ))}
         </Switch>
         <Dock icons={pages} />
