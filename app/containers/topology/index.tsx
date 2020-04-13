@@ -2,33 +2,32 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { Map, Search, XCircle, BarChart2, Loader } from 'react-feather';
-
 import find from 'local-devices';
+
+import { Map, XCircle, BarChart2, Loader } from 'react-feather';
 
 import Container, { ContainerProps } from '../../components/container';
 import DeviceCard from '../../components/deviceCard';
 import Button from '../../components/button';
-
-import NetworkDevice, { ProbeStatus } from '../../utils/NetworkDevice';
-import { parse as parseNmapResults, probeIPs } from '../../utils/nmap';
 
 import { scanWrapper } from './styles.scss';
 import { spin } from '../../styles/_animations.scss';
 
 import {
   selectDevices,
+  clearDevices,
+  selectScanningNetwork,
+  selectProbingDevices,
+  selectLastRun,
   startScanningNetwork,
   stopScanningNetwork,
   addDevices,
   startProbingDevices,
-  clearDevices,
   stopProbingDevices,
-  selectScanningNetwork,
-  selectProbingDevices,
-  updateLastRun,
-  selectLastRun
+  updateLastRun
 } from './slice';
+import NetworkDevice, { ProbeStatus } from '../../utils/NetworkDevice';
+import { parse as parseNmapResults, probeIPs } from '../../utils/nmap';
 
 const Topology: React.FunctionComponent<ContainerProps> = ({
   next,
@@ -40,42 +39,37 @@ const Topology: React.FunctionComponent<ContainerProps> = ({
   const lastRun = useSelector(selectLastRun);
   const dispatch = useDispatch();
 
-  const lightScan = () => {
-    dispatch(startScanningNetwork());
-    find()
-      .then(foundDevices => {
-        dispatch(stopScanningNetwork(null));
-        dispatch(
-          addDevices(
-            foundDevices.map(({ name, ip, mac }) => ({
-              name,
-              ip,
-              mac,
-              ports: undefined,
-              manufacturer: undefined,
-              os: undefined,
-              probeStatus: ProbeStatus.NOT_STARTED,
-              probeError: undefined
-            }))
-          )
-        );
-      })
-      .catch(err => {
-        dispatch(stopScanningNetwork(err));
-      });
-  };
-
-  const deepScan = () => {
-    const devicesToProbe = devices
-      .filter(({ probeStatus }) => probeStatus === ProbeStatus.NOT_STARTED)
-      .map(({ ip }) => ip);
-
-    if (devicesToProbe.length === 0) {
+  useEffect(() => {
+    if (!lastRun) {
       return;
     }
+    console.log(`Run completed in ${lastRun.elapsed}`);
+  }, [lastRun]);
 
-    dispatch(startProbingDevices(devicesToProbe));
-    probeIPs(devicesToProbe)
+  const lightScan = async (): Promise<NetworkDevice[]> => {
+    dispatch(startScanningNetwork());
+    return find().then(foundDevices => {
+      dispatch(stopScanningNetwork(null));
+      const fullFoundDevices = foundDevices.map(({ name, ip, mac }) => ({
+        name,
+        ip,
+        mac,
+        ports: undefined,
+        manufacturer: undefined,
+        os: undefined,
+        probeStatus: ProbeStatus.NOT_STARTED,
+        probeError: undefined
+      }));
+      dispatch(addDevices(fullFoundDevices));
+      return fullFoundDevices;
+    });
+  };
+
+  const deepScan = (devicesToProbe: NetworkDevice[]) => {
+    const ipsToProbe = devicesToProbe.map(({ ip }) => ip);
+
+    dispatch(startProbingDevices(ipsToProbe));
+    probeIPs(ipsToProbe)
       .then(parseNmapResults)
       .then(({ run, devices: probedDevices }) => {
         // Debugging
@@ -83,7 +77,7 @@ const Topology: React.FunctionComponent<ContainerProps> = ({
         // console.dir(probedDevices);
         dispatch(stopProbingDevices(probedDevices));
 
-        const failedProbes: NetworkDevice[] = devices
+        const failedProbes: NetworkDevice[] = devicesToProbe
           .filter(
             ({ ip: potentiallyUnprobedIP }) =>
               !probedDevices.map(({ ip }) => ip).includes(potentiallyUnprobedIP)
@@ -110,13 +104,6 @@ const Topology: React.FunctionComponent<ContainerProps> = ({
       });
   };
 
-  useEffect(() => {
-    if (!lastRun) {
-      return;
-    }
-    console.log(`Run completed in ${lastRun.elapsed}`);
-  }, [lastRun]);
-
   return (
     <Container
       title="Topology"
@@ -127,39 +114,30 @@ const Topology: React.FunctionComponent<ContainerProps> = ({
       prev={prev}
     >
       <div
-        className={`${scanWrapper} flex flex-row justify-center items-baseline`}
+        className={`${scanWrapper} flex flex-row justify-center items-baseline mb-2`}
       >
         <Button
           icon={isScanning ? <Loader className={spin} /> : <BarChart2 />}
           text="Scan Network"
-          onClick={lightScan}
+          onClick={() => lightScan().then(deepScan)}
+          buttonType="default"
         />
         {devices.length > 0 ? (
-          <>
-            <Button
-              icon={isProbing ? <Loader className={spin} /> : <Search />}
-              text="Inspect Devices"
-              onClick={deepScan}
-            />
-            <Button
-              icon={<XCircle />}
-              text="Clear Devices"
-              onClick={() => dispatch(clearDevices())}
-              buttonType="warning"
-            />
-          </>
+          <Button
+            icon={<XCircle />}
+            text="Clear Devices"
+            onClick={() => dispatch(clearDevices())}
+            buttonType="warning"
+            disabled={isScanning || isProbing}
+          />
         ) : (
           ''
         )}
       </div>
-      <div>
-        <ol>
-          {devices.map(d => (
-            <li key={d.ip}>
-              <DeviceCard device={d} />
-            </li>
-          ))}
-        </ol>
+      <div className="flex flex-row flex-wrap items-start content-start justify-center">
+        {devices.map(d => (
+          <DeviceCard key={d.ip} device={d} />
+        ))}
       </div>
     </Container>
   );

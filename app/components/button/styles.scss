@@ -3,14 +3,6 @@
 .btn {
   background-color: $light;
   color: $dark;
-
-  h6 {
-    font-family: 'Fira Code', monospace;
-  }
-
-  &:hover {
-    background-color: $accent-1;
-  }
 }
 
 .success {
@@ -23,5 +15,11 @@
   &:hover {
     background-color: $error;
     color: $light;
+  }
+}
+
+.default {
+  &:hover {
+    background-color: $accent-1;
   }
 }

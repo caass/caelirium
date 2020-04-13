@@ -1,41 +1,52 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { HelpCircle, Loader, AlertCircle, Server } from 'react-feather';
 import NetworkDevice, { ProbeStatus } from '../../utils/NetworkDevice';
+import { spin } from '../../styles/_animations.scss';
+import { card } from './styles.scss';
+import { code } from '../../styles/app.global.scss';
 
 type Props = {
   device: NetworkDevice;
 };
 
 const DeviceCard: React.FunctionComponent<Props> = ({ device }: Props) => {
-  const { name, ip, mac, lastboot, vendor, os, probeStatus, ports } = device;
+  const { ip, mac, lastboot, vendor, os, probeStatus, ports } = device;
+  const [probeStatusIcon, updateProbeStatusIcon] = useState(<Server />);
+
+  const name = device.name === '?' ? `Device at ${ip}` : device.name;
+
+  useEffect(() => {
+    switch (probeStatus) {
+      case ProbeStatus.NOT_STARTED:
+        updateProbeStatusIcon(<HelpCircle />);
+        break;
+      case ProbeStatus.IN_PROGRESS:
+        updateProbeStatusIcon(<Loader className={spin} />);
+        break;
+      case ProbeStatus.FAILED:
+        updateProbeStatusIcon(<AlertCircle />);
+        break;
+      case ProbeStatus.SUCCEEDED:
+        updateProbeStatusIcon(<Server />);
+        break;
+      default:
+        break;
+    }
+  }, [probeStatus]);
 
   return (
-    <ul>
-      <li>{name}</li>
-      <li>{vendor}</li>
-      <li>
-        {typeof os === 'string'
-          ? { os }
-          : os?.map(({ name: osName, accuracy }) => (
-              // eslint-disable-next-line react/jsx-indent
-              <ul key={osName}>
-                <li>{osName}</li>
-                <li>{accuracy}</li>
-              </ul>
-            ))}
-      </li>
-      <li>{ip}</li>
-      <li>{mac}</li>
-      <li>{lastboot}</li>
-      <li>{ProbeStatus[probeStatus]}</li>
-      <li>
-        Open Ports:
-        <ul>
-          {ports?.map(({ number, protocol, service }) => (
-            <li key={number}>{`${number} (${protocol}): ${service}`}</li>
-          ))}
-        </ul>
-      </li>
-    </ul>
+    <button
+      className={`${card} ${code} flex flex-col items-center justify-start transition-colors duration-300 ease-in-out`}
+      type="button"
+      onClick={() => {
+        if (probeStatus === ProbeStatus.FAILED) {
+          console.log('probe failed');
+        }
+      }}
+    >
+      {probeStatusIcon}
+      <pre>{ip}</pre>
+    </button>
   );
 };
 

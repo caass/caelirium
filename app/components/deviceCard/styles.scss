@@ -1,0 +1,20 @@
+@import '../../styles/colors';
+
+.card {
+  margin: 0.25rem;
+  padding: 1rem;
+  border-radius: 1rem;
+
+  svg {
+    font-size: 1.5rem;
+  }
+
+  pre {
+    font-size: 1rem;
+  }
+
+  &:hover {
+    background-color: $accent-1;
+    color: $dark;
+  }
+}
